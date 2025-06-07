@@ -13,7 +13,10 @@ import {
   IonList,
   IonItem,
   IonIcon,
-  IonLabel
+  IonLabel,
+  IonButtons,
+  IonButton,
+  IonBackButton
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -35,7 +38,11 @@ import {
     IonList,
     IonItem,
     IonIcon,
-    IonLabel
+    IonButton,
+    IonLabel,
+    IonButtons,
+    IonBackButton
+    
   ]
 })
 export class InicioPage implements OnInit {
@@ -55,4 +62,12 @@ export class InicioPage implements OnInit {
   constructor() { }
 
   ngOnInit() { }
+
+volverAtras() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = '/inicio'; // o Router.navigate
+  }
+}
 }

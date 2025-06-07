@@ -68,4 +68,13 @@ export class RegistroPage {
     alert('Usuario registrado con éxito');
     this.router.navigate(['/']);
   }
+
+ volverAtras() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = '/inicio'; // o Router.navigate
+  }
+}
+  
 }

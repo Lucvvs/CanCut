@@ -37,4 +37,14 @@ export class PerfilPage {
     const reservasGuardadas = localStorage.getItem('reservas');
     this.reservas = reservasGuardadas ? JSON.parse(reservasGuardadas) : [];
   }
+
+
+volverAtras() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = '/inicio'; // o Router.navigate
+  }
+}
+
 }

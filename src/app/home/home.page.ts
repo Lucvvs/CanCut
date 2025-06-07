@@ -7,6 +7,8 @@ import {
   IonItem,
   IonLabel,
   IonButton,
+  IonBackButton,
+  IonButtons
 } from '@ionic/angular/standalone';
 
 import { Component } from '@angular/core';
@@ -32,7 +34,9 @@ import { Router } from '@angular/router';
     IonInput,
     IonItem,
     IonLabel,
-    IonButton
+    IonButton,
+    IonButtons,
+    IonBackButton
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
@@ -64,7 +68,7 @@ export class HomePage {
 
   irARegistro() {
   this.router.navigate(['/registro'], {
-    state: { from: 'login' } // ✔️ Props simuladas, punto 3 de la rúbrica
+    state: { from: 'login' } // 
   });
 }
   
