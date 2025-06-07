@@ -25,3 +25,16 @@
 #container a {
   text-decoration: none;
 }
+
+
+
+.registro-link {
+  margin-top: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.registro-link:hover {
+  transform: scale(1.05);
+}

@@ -1,0 +1,46 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+ion-input,
+ion-datetime {
+  border: 1px solid #00728f65;
+  border-radius: 8px;
+  padding: 6px 12px;
+  background-color: #0177a51f;
+  font-size: 1.2rem;
+}
+
+ion-label {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+
+
+ion-button.registro-btn {
+  --background: #0a7a68;
+  --background-hover: #0e947b;
+  --background-activated: #066656;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --transition: all 0.3s ease;
+
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+
+ion-button.registro-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}

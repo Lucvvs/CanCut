@@ -1,0 +1,36 @@
+.bienvenida h1 {
+  font-size: 2em;
+  text-align: center;
+  animation: fadeInUp 1s ease-in-out;
+  margin-top: 10px;
+}
+
+.bienvenida h1 {
+  text-align: center;
+  font-size: 1.8em;
+  margin-top: 15px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.bienvenida span {
+  color: #0a7a68;
+  font-weight: bold;
+}
+
+.seccion-titulo {
+  margin: 24px 8px 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
