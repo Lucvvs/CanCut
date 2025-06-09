@@ -1,14 +1,10 @@
 import {
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   IonInput,
   IonItem,
   IonLabel,
-  IonButton,
-  IonBackButton,
-  IonButtons
 } from '@ionic/angular/standalone';
 
 import { Component } from '@angular/core';
@@ -29,14 +25,10 @@ import { Router } from '@angular/router';
     RouterModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonInput,
     IonItem,
-    IonLabel,
-    IonButton,
-    IonButtons,
-    IonBackButton
+    IonLabel
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],

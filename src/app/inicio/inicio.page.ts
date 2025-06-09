@@ -4,23 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatRadioModule } from '@angular/material/radio';
 import { HeaderComponent } from '../components/header/header.component';
-import { TabsComponent } from '../components/tabs/tabs.component';
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonCard,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
   IonList,
   IonItem,
-  IonIcon,
   IonLabel,
-  IonButtons,
-  IonButton,
-  IonBackButton,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -32,10 +24,7 @@ import {
     CommonModule,
     FormsModule,
     IonContent,
-    IonHeader,
     HeaderComponent,
-    IonTitle,
-    IonToolbar,
     IonCard,
     IonCardHeader,  
     IonCardTitle,
@@ -43,12 +32,8 @@ import {
     MatRadioModule,
     IonList,
     IonItem,
-    TabsComponent,
-    IonIcon,
-    IonButton,
-    IonLabel,
-    IonButtons,
-    IonBackButton
+
+    IonLabel
     
   ]
 })

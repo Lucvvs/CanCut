@@ -10,20 +10,13 @@ import { Router } from '@angular/router';
 import {
   IonButton,
   IonContent,
-  IonDatetime,
   IonInput,
   IonItem,
   IonLabel,
   IonRadio,
   IonRadioGroup,
   IonSelect,
-  IonSelectOption,
-  IonTitle,
-  IonToolbar,IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonHeader
+  IonSelectOption
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common'; 
 import { RouterModule } from '@angular/router';
@@ -36,9 +29,6 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
     IonContent,
-    IonToolbar,
-    IonHeader,
-    IonTitle,
     IonInput,
     IonItem,
     HeaderComponent,
@@ -50,12 +40,7 @@ import { RouterModule } from '@angular/router';
     IonButton,
     IonSelect,
     IonSelectOption,
-    IonDatetime,
     IonRadio,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
     IonRadioGroup
   ],
   templateUrl: './agendar.page.html',

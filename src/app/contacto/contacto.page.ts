@@ -10,10 +10,10 @@ import {
   IonItem,
   IonLabel,
   IonButton,
+  IonText,
   IonTextarea,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -31,9 +31,9 @@ import {
     IonLabel,
     IonButton,
     IonTextarea,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
+    IonText,
+    IonSelect,
+    IonSelectOption,
     HeaderComponent
   ],
 })
@@ -42,9 +42,10 @@ export class ContactoPage {
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.contactoForm = this.fb.group({
-      nombre: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.pattern(/^.{5,30}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      mensaje: ['', [Validators.required, Validators.minLength(10)]],
+      tipoSolicitud: ['', Validators.required],
+      mensaje: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
     });
   }
 
@@ -54,13 +55,13 @@ export class ContactoPage {
       return;
     }
 
-    console.log('Mensaje enviado:', this.contactoForm.value);
+    console.log('Formulario enviado:', this.contactoForm.value);
     alert('¡Gracias por contactarnos!');
     this.contactoForm.reset();
     this.router.navigate(['/tabs/inicio']);
   }
 
   cancelar() {
-    this.router.navigate(['/tabs/inicio']);
+    this.contactoForm.reset(); // ✅ limpia campos
   }
 }

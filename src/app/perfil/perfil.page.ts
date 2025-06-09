@@ -5,12 +5,6 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonList,
-  IonItem,
-  IonLabel,
   IonCard,
   IonCardHeader,
   IonCardTitle,
@@ -27,17 +21,11 @@ import {
     CommonModule,
     FormsModule,
     IonContent,
-    IonHeader,
-    IonToolbar,
     HeaderComponent,
-    IonTitle,
     IonCard,
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonList,
-    IonItem,
-    IonLabel,
     IonText
   ]
 })

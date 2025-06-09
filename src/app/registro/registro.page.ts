@@ -10,13 +10,8 @@ import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
   IonInput,
-  IonItem,
   IonLabel,
   IonButton,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonDatetime,
 } from '@ionic/angular/standalone';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -30,18 +25,13 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     IonContent,
     IonInput,
-    IonItem,
     IonLabel,
     IonButton,
     HeaderComponent,
-    IonHeader,
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    IonToolbar,
-    IonTitle,
-    IonDatetime,
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
