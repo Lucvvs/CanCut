@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../components/header/header.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { Router } from '@angular/router';
+
 import {
   IonButton,
   IonContent,
@@ -37,6 +43,10 @@ import { RouterModule } from '@angular/router';
     IonItem,
     HeaderComponent,
     IonLabel,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
     IonButton,
     IonSelect,
     IonSelectOption,
@@ -63,35 +73,72 @@ export class AgendarPage {
     '18:00', '18:30'
   ];
 
-  constructor(private fb: FormBuilder) {
+  sucursales = [
+  {
+    nombre: 'Providencia',
+    direccion: 'Nueva Providencia 3131',
+    mapsUrl: 'https://www.google.com/maps?q=Av.+Nueva+Providencia+3131'
+  },
+  {
+    nombre: 'Ñuñoa',
+    direccion: 'Irarrázaval 916',
+    mapsUrl: 'https://www.google.com/maps?q=Irarrázaval+916'
+  },
+  {
+    nombre: 'Maipú',
+    direccion: 'Pajaritos 4481',
+    mapsUrl: 'https://www.google.com/maps?q=Pajaritos+4481'
+  }
+];
+  
+
+  fechaFuturaValidator(control: any) {
+  const fechaSeleccionada = new Date(control.value);
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0); // Elimina la hora para comparar solo fecha
+
+  return fechaSeleccionada > hoy ? null : { fechaInvalida: true };
+}
+
+  constructor(private fb: FormBuilder, private router: Router) {
     this.agendarForm = this.fb.group({
       nombreMascota: ['', Validators.required],
       edadMascota: ['', [Validators.required, Validators.min(0)]],
       tamanoMascota: ['', Validators.required],
-      fecha: ['', Validators.required],
+      fecha: ['', [Validators.required, this.fechaFuturaValidator]],
       hora: ['', Validators.required],
-      lugarEncuentro: ['', Validators.required]
+      lugarEncuentro: ['', Validators.required],
+      sucursal: ['', Validators.required]
     });
 
     this.agendarForm.valueChanges.subscribe(() => {
       this.agendarForm.markAllAsTouched();
     });
 
-    this.reservas = JSON.parse(localStorage.getItem('reservas') || '[]'); // ✅ NUEVA LÍNEA
+    this.reservas = JSON.parse(localStorage.getItem('reservas') || '[]'); 
   }
 
   reservar() {
   if (this.agendarForm.valid) {
     const datos = this.agendarForm.value;
 
+    const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
+
+    // Agregar el correo del usuario activo a la reserva
+    const nuevaReserva = {
+      ...datos,
+      emailUsuario: usuarioActivo.email
+    };
+
     const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    reservas.push(datos);
+    reservas.push(nuevaReserva);
     localStorage.setItem('reservas', JSON.stringify(reservas));
 
-    this.reservas = reservas; // ✅ Esta línea actualiza la lista en pantalla
+    this.reservas = reservas.filter((r: any) => r.emailUsuario === usuarioActivo.email);
 
     alert(`¡Reserva realizada para ${datos.nombreMascota}!`);
     this.agendarForm.reset();
+    this.router.navigate(['/tabs/perfil']);
   }
 }
 

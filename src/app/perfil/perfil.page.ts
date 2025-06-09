@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; // ✅ Importamos Router
+import { Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
@@ -11,6 +11,10 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
   IonText
 } from '@ionic/angular/standalone';
 
@@ -27,6 +31,10 @@ import {
     IonToolbar,
     HeaderComponent,
     IonTitle,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
     IonList,
     IonItem,
     IonLabel,
@@ -35,11 +43,17 @@ import {
 })
 export class PerfilPage {
   reservas: any[] = [];
+  usuario: any = {};
 
-  constructor(private router: Router) {} // ✅ Constructor con Router
+  constructor(private router: Router) {}
 
   ionViewWillEnter() {
-    const reservasGuardadas = localStorage.getItem('reservas');
-    this.reservas = reservasGuardadas ? JSON.parse(reservasGuardadas) : [];
-  }
+  const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
+  const todasLasReservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+
+  // Filtrar solo las reservas del usuario activo
+  this.reservas = todasLasReservas.filter((r: any) => r.emailUsuario === usuarioActivo.email);
+
+  this.usuario = usuarioActivo;
+}
 }

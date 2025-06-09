@@ -57,21 +57,24 @@ export class RegistroPage {
   }
 
   registrar() {
-    const nuevoUsuario = this.registroForm.value;
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+  const nuevoUsuario = this.registroForm.value;
+  const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
 
-    const yaExiste = usuarios.some((u: any) => u.email === nuevoUsuario.email);
-    if (yaExiste) {
-      alert('Este correo ya está registrado');
-      return;
-    }
-
-    usuarios.push(nuevoUsuario);
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-
-    alert('Usuario registrado con éxito');
-    this.router.navigate(['/']);
+  const yaExiste = usuarios.some((u: any) => u.email === nuevoUsuario.email);
+  if (yaExiste) {
+    alert('Este correo ya está registrado');
+    return;
   }
+
+  usuarios.push(nuevoUsuario);
+  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+  // 🔥 Esta línea guarda al usuario registrado como el "activo"
+  localStorage.setItem('usuarioActivo', JSON.stringify(nuevoUsuario));
+
+  alert('Usuario registrado con éxito');
+  this.router.navigate(['/']);
+}
 
 
 }

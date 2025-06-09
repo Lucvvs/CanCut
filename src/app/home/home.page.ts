@@ -59,6 +59,9 @@ export class HomePage {
   const usuarioValido = usuariosGuardados.find((u: any) => u.email === email && u.password === password);
 
   if (usuarioValido) {
+    // 🔥 Guarda el usuario que inició sesión
+    localStorage.setItem('usuarioActivo', JSON.stringify(usuarioValido));
+
     this.router.navigate(['/tabs/inicio']);
   } else {
     alert('Credenciales inválidas');

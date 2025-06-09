@@ -1,20 +1,27 @@
 <app-header></app-header>
 
+
+
 <ion-content class="ion-padding">
+
+<div class="bienvenida">
+  <h1>Agendar hora <span class="marca"> 📅</span></h1>
+</div>
+
   <form [formGroup]="agendarForm" (ngSubmit)="reservar()" class="formulario">
 
     <div class="campo">
-      <ion-label position="stacked">Nombre de la mascota</ion-label>
+      <ion-label class="label-movible" position="stacked">Nombre de la mascota</ion-label>
       <ion-input type="text" formControlName="nombreMascota" placeholder="Ej: Firulais"></ion-input>
     </div>
 
     <div class="campo">
-      <ion-label position="stacked">Edad de la mascota (años)</ion-label>
+      <ion-label class="label-movible" position="stacked">Edad de la mascota (años)</ion-label>
       <ion-input type="number" formControlName="edadMascota" placeholder="Ej: 3"></ion-input>
     </div>
 
     <div class="campo">
-      <ion-label position="stacked">Tamaño</ion-label>
+      <ion-label class="label-movible" position="stacked">Tamaño</ion-label>
       <ion-select formControlName="tamanoMascota" placeholder="Selecciona un tamaño" interface="popover">
         <ion-select-option value="pequeno">Pequeña</ion-select-option>
         <ion-select-option value="mediano">Mediano</ion-select-option>
@@ -22,20 +29,28 @@
       </ion-select>
     </div>
 
-    <div class="campo">
-      <ion-label position="stacked">Fecha</ion-label>
-      <ion-datetime formControlName="fecha" presentation="date" display-format="DD/MM/YYYY"></ion-datetime>
-    </div>
+    <div class="campo2">
+  <ion-label class="label-movible2" position="stacked">Fecha (usa el icono)</ion-label>
+  <mat-form-field appearance="outline" class="fecha-picker">
+  <input matInput
+       [matDatepicker]="picker"
+       placeholder="Selecciona una fecha"
+       formControlName="fecha"
+       [readonly]="true" />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+</div>
 
     <div class="campo">
-  <ion-label position="stacked">Hora de atención</ion-label>
+  <ion-label class="label-movible" position="stacked">Hora de atención</ion-label>
   <ion-select formControlName="hora" interface="popover" placeholder="Selecciona una hora">
     <ion-select-option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</ion-select-option>
   </ion-select>
 </div>
 
     <div class="campo">
-  <ion-label position="stacked">Lugar de encuentro</ion-label>
+  <ion-label class="label-movible" position="stacked">Lugar de encuentro</ion-label>
   <ion-radio-group formControlName="lugarEncuentro">
     <ion-item lines="none">
       <ion-radio slot="start" value="domicilio" color="success"></ion-radio>
@@ -46,6 +61,15 @@
       <ion-label>Sucursal</ion-label>
     </ion-item>
   </ion-radio-group>
+</div>
+
+<div class="campo">
+  <ion-label class="label-movible" position="stacked">Sucursal más cercana</ion-label>
+  <ion-select formControlName="sucursal" interface="popover" placeholder="Selecciona una sucursal">
+    <ion-select-option *ngFor="let sucursal of sucursales" [value]="sucursal.nombre">
+      {{ sucursal.nombre }} – {{ sucursal.direccion }}
+    </ion-select-option>
+  </ion-select>
 </div>
 
 
