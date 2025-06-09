@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HeaderComponent } from '../components/header/header.component';
+import { TabsComponent } from '../components/tabs/tabs.component';
 import {
   IonContent,
   IonHeader,
@@ -16,7 +19,7 @@ import {
   IonLabel,
   IonButtons,
   IonButton,
-  IonBackButton
+  IonBackButton,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -29,6 +32,7 @@ import {
     FormsModule,
     IonContent,
     IonHeader,
+    HeaderComponent,
     IonTitle,
     IonToolbar,
     IonCard,
@@ -37,6 +41,7 @@ import {
     IonCardContent,
     IonList,
     IonItem,
+    TabsComponent,
     IonIcon,
     IonButton,
     IonLabel,
@@ -59,15 +64,7 @@ export class InicioPage implements OnInit {
     { nombre: 'Baño antipulgas', precio: 12000 },
   ];
 
-  constructor() { }
+  constructor(private router: Router) {}
 
   ngOnInit() { }
-
-volverAtras() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = '/inicio'; // o Router.navigate
-  }
-}
 }

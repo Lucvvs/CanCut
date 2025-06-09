@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from '../components/header/header.component';
 import {
   IonButton,
   IonContent,
@@ -34,6 +35,7 @@ import { RouterModule } from '@angular/router';
     IonTitle,
     IonInput,
     IonItem,
+    HeaderComponent,
     IonLabel,
     IonButton,
     IonSelect,
@@ -93,12 +95,6 @@ export class AgendarPage {
   }
 }
 
-volverAtras() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = '/inicio'; // o Router.navigate
-  }
-}
+
 
 }

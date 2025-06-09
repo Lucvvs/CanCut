@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; // ✅ Importamos Router
+import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
   IonHeader,
@@ -23,6 +25,7 @@ import {
     IonContent,
     IonHeader,
     IonToolbar,
+    HeaderComponent,
     IonTitle,
     IonList,
     IonItem,
@@ -33,18 +36,10 @@ import {
 export class PerfilPage {
   reservas: any[] = [];
 
+  constructor(private router: Router) {} // ✅ Constructor con Router
+
   ionViewWillEnter() {
     const reservasGuardadas = localStorage.getItem('reservas');
     this.reservas = reservasGuardadas ? JSON.parse(reservasGuardadas) : [];
   }
-
-
-volverAtras() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = '/inicio'; // o Router.navigate
-  }
-}
-
 }

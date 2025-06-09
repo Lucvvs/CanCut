@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
   IonInput,
@@ -28,6 +29,7 @@ import { RouterModule } from '@angular/router';
     IonItem,
     IonLabel,
     IonButton,
+    HeaderComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -39,6 +41,8 @@ import { RouterModule } from '@angular/router';
 })
 export class RegistroPage {
   registroForm: FormGroup;
+
+  
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.registroForm = this.fb.group({
@@ -69,12 +73,5 @@ export class RegistroPage {
     this.router.navigate(['/']);
   }
 
- volverAtras() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = '/inicio'; // o Router.navigate
-  }
-}
-  
+
 }

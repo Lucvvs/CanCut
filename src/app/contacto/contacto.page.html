@@ -1,0 +1,27 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <h2>Contáctanos</h2>
+
+  <form [formGroup]="contactoForm">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Correo electrónico</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Mensaje</ion-label>
+      <ion-textarea formControlName="mensaje"></ion-textarea>
+    </ion-item>
+
+    <div class="botones-contacto">
+      <ion-button expand="block" color="primary" (click)="enviar()">Enviar</ion-button>
+      <ion-button expand="block" color="medium" (click)="cancelar()">Cancelar</ion-button>
+    </div>
+  </form>
+</ion-content>
