@@ -42,6 +42,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
+  loginError: string = '';
   loginForm: FormGroup;
 
   constructor(private fb: FormBuilder, private router: Router) {
@@ -53,18 +54,16 @@ export class HomePage {
 
   login() {
   const { email, password } = this.loginForm.value;
-
   const usuariosGuardados = JSON.parse(localStorage.getItem('usuarios') || '[]');
-
   const usuarioValido = usuariosGuardados.find((u: any) => u.email === email && u.password === password);
 
   if (usuarioValido) {
-    // 🔥 Guarda el usuario que inició sesión
     localStorage.setItem('usuarioActivo', JSON.stringify(usuarioValido));
-
+    this.loginError = ''; // limpia el error si hay
     this.router.navigate(['/tabs/inicio']);
   } else {
-    alert('Credenciales inválidas');
+    this.loginError = 'Correo o contraseña incorrectos'; // ⚠️ muestra mensaje
+    this.loginForm.reset();
   }
 }
 
