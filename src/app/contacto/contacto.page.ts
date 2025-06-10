@@ -62,6 +62,6 @@ export class ContactoPage {
   }
 
   cancelar() {
-    this.contactoForm.reset(); // ✅ limpia campos
+    this.contactoForm.reset(); 
   }
 }

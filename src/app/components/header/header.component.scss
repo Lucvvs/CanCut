@@ -34,7 +34,6 @@
   transform: scale(1.1);
 }
 
-/* Animación que hace "parpadear" la sombra */
 @keyframes pulsoSombra {
   0%, 100% {
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));

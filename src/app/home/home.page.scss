@@ -70,7 +70,7 @@
   width: 200px;
   height: auto;
   filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.5));
-  border-radius: 100px; /* Puedes ajustar el valor según lo redondo que lo quieras */
+  border-radius: 100px; 
 }
 
 .bienvenida h1 {
@@ -97,8 +97,7 @@
 }
 
 ion-input {
-  font-size: 1.4rem; // 👈 tamaño del texto ingresado
-  padding-top: 6px;
+  font-size: 1.4rem; 
 }
 
 

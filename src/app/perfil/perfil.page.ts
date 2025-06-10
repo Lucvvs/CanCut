@@ -39,7 +39,8 @@ export class PerfilPage {
   const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
   const todasLasReservas = JSON.parse(localStorage.getItem('reservas') || '[]');
 
-  // Filtrar solo las reservas del usuario activo
+
+  
   this.reservas = todasLasReservas.filter((r: any) => r.emailUsuario === usuarioActivo.email);
 
   this.usuario = usuarioActivo;

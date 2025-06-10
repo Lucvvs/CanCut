@@ -59,8 +59,8 @@ ion-select {
   background-color: #b3b3b3;
   font-size: 1.2rem;
   --placeholder-color: #000000;
-  width: 78vw; /* Controla el ancho */
-  height: 11vw; /* Controla el alto */
+  width: 78vw; 
+  height: 11vw; 
   margin: 5px auto;
   --color: #000
 }
@@ -157,7 +157,7 @@ ion-button.registro-btn:active {
   transform: scale(1.1);
 }
 
-/* Animación que hace "parpadear" la sombra */
+/* sombra pulsante */
 @keyframes pulsoSombra {
   0%, 100% {
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
@@ -171,7 +171,7 @@ ion-button.registro-btn:active {
 /* BOTONES LUGAR ENCUENTRO */
 
 ion-radio-group {
-  padding-left: 10vw; /* Ajusta este valor como quieras */
+  padding-left: 10vw; 
   padding-top: 3vw;
 }
 

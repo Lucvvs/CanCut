@@ -97,7 +97,7 @@ export class RegistroPage {
     });
   }
 
-  // Validador para verificar edad mínima (5 años)
+  // Validador verifica edad mínima 5
   fechaMayorA5AniosValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
       const fecha = new Date(control.value);
@@ -107,7 +107,7 @@ export class RegistroPage {
     };
   }
 
-  // Validador para limitar la cantidad de espacios
+  // Validador para cantidad de espacio
   maxEspaciosValidator(max: number) {
     return (control: AbstractControl): ValidationErrors | null => {
       const texto = control.value || '';
@@ -116,7 +116,7 @@ export class RegistroPage {
     };
   }
 
-  // Mostrar mensaje de error por campo
+  // mensaje de error 
   getError(controlName: string): string {
     const control = this.registroForm.get(controlName);
     if (!control || !control.touched || !control.errors) return '';

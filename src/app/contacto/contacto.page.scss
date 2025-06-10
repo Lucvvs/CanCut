@@ -57,15 +57,15 @@ ion-item {
 }
 
 ion-label {
-  color: #027286 !important; // títulos flotantes en cian
+  color: #027286 !important; 
 }
 
 ion-input, ion-textarea, ion-select {
-  color: white !important; // texto escrito en blanco
+  color: white !important; 
 }
 
 ::placeholder {
-  color: rgba(255, 255, 255, 0.4); // placeholders opcional
+  color: rgba(255, 255, 255, 0.4); 
 }
 
 ion-select::part(icon), ion-select::part(text) {

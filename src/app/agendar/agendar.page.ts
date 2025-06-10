@@ -48,7 +48,7 @@ import { RouterModule } from '@angular/router';
 })
 export class AgendarPage {
   agendarForm: FormGroup;
-  reservas: any[] = []; // ✅ NUEVA LÍNEA
+  reservas: any[] = []; 
 
   horasDisponibles: string[] = [
     '10:00', '10:30', '11:00', '11:30',
@@ -80,7 +80,7 @@ export class AgendarPage {
   fechaFuturaValidator(control: any) {
   const fechaSeleccionada = new Date(control.value);
   const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0); // Elimina la hora para comparar solo fecha
+  hoy.setHours(0, 0, 0, 0); // borrar hora
 
   return fechaSeleccionada > hoy ? null : { fechaInvalida: true };
 }
@@ -109,7 +109,7 @@ export class AgendarPage {
 
     const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
 
-    // Agregar el correo del usuario activo a la reserva
+    // Agregar  correo
     const nuevaReserva = {
       ...datos,
       emailUsuario: usuarioActivo.email

@@ -51,10 +51,10 @@ export class HomePage {
 
   if (usuarioValido) {
     localStorage.setItem('usuarioActivo', JSON.stringify(usuarioValido));
-    this.loginError = ''; // limpia el error si hay
+    this.loginError = ''; 
     this.router.navigate(['/tabs/inicio']);
   } else {
-    this.loginError = 'Correo o contraseña incorrectos'; // ⚠️ muestra mensaje
+    this.loginError = 'Correo o contraseña incorrectos'; 
     this.loginForm.reset();
   }
 }
