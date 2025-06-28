@@ -1,13 +1,14 @@
 .custom-tab-bar {
   background: #1e1e1e;
   border-top: 2px solid #444;
-  height: 50px;
   padding: 6px;
+  padding-bottom: env(safe-area-inset-bottom);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0;
   overflow: visible;
+
 
   ion-tab-button {
     --color-selected: #00e5ff;
