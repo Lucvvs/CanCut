@@ -1,25 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HeaderComponent } from '../components/header/header.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 import { Router } from '@angular/router';
-
+import { CommonModule } from '@angular/common';
 import {
-  IonButton,
   IonContent,
   IonInput,
   IonItem,
   IonLabel,
+  IonSelect,
+  IonSelectOption,
   IonRadio,
   IonRadioGroup,
-  IonSelect,
-  IonSelectOption
+  IonButton,
+  ToastController
 } from '@ionic/angular/standalone';
-import { CommonModule } from '@angular/common'; 
 import { RouterModule } from '@angular/router';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { HeaderComponent } from '../components/header/header.component'; 
+import { SqliteService } from '../services/sqlite.service';
 
 @Component({
   selector: 'app-agendar',
@@ -30,103 +31,101 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     IonContent,
     IonInput,
+    HeaderComponent, 
     IonItem,
-    HeaderComponent,
     IonLabel,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatNativeDateModule,
-    IonButton,
     IonSelect,
     IonSelectOption,
     IonRadio,
-    IonRadioGroup
+    IonRadioGroup,
+    IonButton,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ],
   templateUrl: './agendar.page.html',
   styleUrls: ['./agendar.page.scss'],
 })
-export class AgendarPage {
+export class AgendarPage implements OnInit {
   agendarForm: FormGroup;
-  reservas: any[] = []; 
+  reservas: any[] = [];
 
-  horasDisponibles: string[] = [
-    '10:00', '10:30', '11:00', '11:30',
-    '12:00', '12:30', '13:00', '13:30',
-    '14:00', '14:30', '15:00', '15:30',
-    '16:00', '16:30', '17:00', '17:30',
-    '18:00', '18:30'
+  horasDisponibles = [
+    '10:00','10:30','11:00','11:30',
+    '12:00','12:30','13:00','13:30',
+    '14:00','14:30','15:00','15:30',
+    '16:00','16:30','17:00','17:30',
+    '18:00','18:30'
   ];
 
   sucursales = [
-  {
-    nombre: 'Providencia',
-    direccion: 'Nueva Providencia 3131',
-    mapsUrl: 'https://www.google.com/maps?q=Av.+Nueva+Providencia+3131'
-  },
-  {
-    nombre: 'Ñuñoa',
-    direccion: 'Irarrázaval 916',
-    mapsUrl: 'https://www.google.com/maps?q=Irarrázaval+916'
-  },
-  {
-    nombre: 'Maipú',
-    direccion: 'Pajaritos 4481',
-    mapsUrl: 'https://www.google.com/maps?q=Pajaritos+4481'
-  }
-];
-  
+    { nombre: 'Providencia', direccion: 'Nueva Providencia 3131' },
+    { nombre: 'Ñuñoa', direccion: 'Irarrázaval 916' },
+    { nombre: 'Maipú', direccion: 'Pajaritos 4481' }
+  ];
 
-  fechaFuturaValidator(control: any) {
-  const fechaSeleccionada = new Date(control.value);
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0); // borrar hora
-
-  return fechaSeleccionada > hoy ? null : { fechaInvalida: true };
-}
-
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private sqlite: SqliteService,
+    private toastCtrl: ToastController
+  ) {
     this.agendarForm = this.fb.group({
       nombreMascota: ['', Validators.required],
       edadMascota: ['', [Validators.required, Validators.min(0)]],
       tamanoMascota: ['', Validators.required],
-      fecha: ['', [Validators.required, this.fechaFuturaValidator]],
+      fecha: ['', Validators.required],
       hora: ['', Validators.required],
       lugarEncuentro: ['', Validators.required],
       sucursal: ['', Validators.required]
     });
-
-    this.agendarForm.valueChanges.subscribe(() => {
-      this.agendarForm.markAllAsTouched();
-    });
-
-    this.reservas = JSON.parse(localStorage.getItem('reservas') || '[]'); 
   }
 
-  reservar() {
-  if (this.agendarForm.valid) {
+  ngOnInit() {
+    // Carga inicial de reservas del usuario activo
+    this.loadReservas();
+  }
+
+  private async loadReservas() {
+    const usuario = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
+    const todas = await this.sqlite.getReservas();
+    this.reservas = todas.filter(r => r.emailUsuario === usuario.email);
+  }
+
+  async reservar() {
+    if (this.agendarForm.invalid) return;
+
     const datos = this.agendarForm.value;
+    const usuario = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
 
-    const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
+    // Inserta en SQLite
+    await this.sqlite.addReserva({
+      nombreMascota: datos.nombreMascota,
+      edadMascota: Number(datos.edadMascota),
+      tamanoMascota: datos.tamanoMascota,
+      fecha: datos.fecha,
+      hora: datos.hora,
+      lugarEncuentro: datos.lugarEncuentro,
+      sucursal: datos.sucursal
+    });
 
-    // Agregar  correo
-    const nuevaReserva = {
-      ...datos,
-      emailUsuario: usuarioActivo.email
-    };
+    // Asocia el email antes de recargar
+    console.log('✅ Reserva almacenada en la BDD para:', usuario.email);
 
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    reservas.push(nuevaReserva);
-    localStorage.setItem('reservas', JSON.stringify(reservas));
+    // Opcional: guardar emailUsuario en la misma tabla si la quieres
+    // Para este ejemplo, recargamos el listado local:
+    await this.loadReservas();
 
-    this.reservas = reservas.filter((r: any) => r.emailUsuario === usuarioActivo.email);
+    // Feedback al usuario
+    const toast = await this.toastCtrl.create({
+      message: `¡Reserva para ${datos.nombreMascota} registrada!`,
+      duration: 2000,
+      color: 'success'
+    });
+    await toast.present();
 
-    alert(`¡Reserva realizada para ${datos.nombreMascota}!`);
     this.agendarForm.reset();
     this.router.navigate(['/tabs/perfil']);
   }
-}
-
-
-
 }

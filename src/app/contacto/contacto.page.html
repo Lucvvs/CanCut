@@ -54,8 +54,12 @@
 
   <!-- Botones -->
   <div class="botones-contacto">
-    <ion-button type="submit" color="success">Enviar</ion-button>
-    <ion-button type="button" color="medium" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button type="submit" color="success" [disabled]="contactoForm.invalid">
+      Enviar
+    </ion-button>
+    <ion-button type="button" color="medium" (click)="cancelar()">
+      Cancelar
+    </ion-button>
   </div>
 </form>
 
