@@ -7,8 +7,8 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
   selector: 'app-root',
   standalone: true,
   imports: [
-    IonApp,            // ↪️ para renderizar <ion-app>
-    IonRouterOutlet    // ↪️ para renderizar <ion-router-outlet>
+    IonApp,            
+    IonRouterOutlet    
   ],
   templateUrl: 'app.component.html'
 })
@@ -24,11 +24,11 @@ export class AppComponent {
 
   private async initDatabase() {
   try {
-    await (this.sqliteService as any).deleteDatabase(); // ✅ SOLO UNA VEZ
+    // await (this.sqliteService as any).deleteDatabase(); // desarrollo
     await this.sqliteService.initialize();
-    console.log('♥[SQLite] Base de datos reiniciada e inicializada');
+    console.log('♥ Base de datos inicializada');
   } catch (err) {
-    console.error('♥[SQLite] Error inicializando la BDD', err);
+    console.error('♥ Error inicializando la BDD', err);
   }
 }
 }

@@ -84,7 +84,7 @@ export class AgendarPage implements OnInit {
   }
 
   ngOnInit() {
-    // Carga inicial de reservas del usuario activo
+    // Carga inicial de reservas
     this.loadReservas();
   }
 
@@ -100,7 +100,7 @@ export class AgendarPage implements OnInit {
   const datos = this.agendarForm.value;
   const usuario = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
 
-  // 🛰️ Obtener ubicación
+  // location 
   let lat: number | undefined;
   let lng: number | undefined;
 
@@ -115,7 +115,7 @@ export class AgendarPage implements OnInit {
     lng = undefined;
   }
 
-  // 🗃️ Insertar en SQLite
+  // add a sqlite
   await this.sqlite.addReserva({
     nombreMascota: datos.nombreMascota,
     edadMascota: Number(datos.edadMascota),
@@ -129,7 +129,6 @@ export class AgendarPage implements OnInit {
     longitud: lng
   });
 
-  console.log('♥[SQLite] Reserva almacenada en la BDD para:', usuario.email);
 
   await this.loadReservas();
 

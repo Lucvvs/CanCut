@@ -6,6 +6,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SqliteService } from '../services/sqlite.service';
 import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
@@ -40,7 +41,7 @@ import { RouterModule } from '@angular/router';
 export class RegistroPage {
   registroForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private sqlite: SqliteService) {
     this.registroForm = this.fb.group({
       nombre: [
         '',
@@ -143,27 +144,31 @@ export class RegistroPage {
     return 'Campo inválido';
   }
 
-  registrar() {
-    if (this.registroForm.invalid) {
-      this.registroForm.markAllAsTouched();
-      return;
-    }
+  async registrar() {
+  if (this.registroForm.invalid) {
+    this.registroForm.markAllAsTouched();
+    return;
+  }
 
-    const nuevoUsuario = this.registroForm.value;
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+  const nuevoUsuario = this.registroForm.value;
 
-    const yaExiste = usuarios.some((u: any) => u.email === nuevoUsuario.email);
+  try {
+    const usuariosExistentes = await this.sqlite.getUsuarios();
+    const yaExiste = usuariosExistentes.some(u => u.email === nuevoUsuario.email);
+
     if (yaExiste) {
       alert('Este correo ya está registrado');
       return;
     }
 
-    usuarios.push(nuevoUsuario);
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    await this.sqlite.addUsuario(nuevoUsuario);
     localStorage.setItem('usuarioActivo', JSON.stringify(nuevoUsuario));
 
     alert('Usuario registrado con éxito');
     this.registroForm.reset();
     this.router.navigate(['/']);
+  } catch (e) {
+    console.error('Error al registrar en SQLite:', e);
   }
+}
 }

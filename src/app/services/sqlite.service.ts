@@ -15,13 +15,12 @@ export class SqliteService {
   private readonly DB_VERSION = 1;
 
   constructor() {
-    // Creamos el wrapper de SQLite
     this.sqlite = new SQLiteConnection(CapacitorSQLite);
   }
 
-  /** Inicializa la BDD, crea tablas y siembra un usuario de prueba */
+  /** Inicializacion deBDD con usuario de prueba para desarrollo */
   public async initialize(): Promise<void> {
-    // 1️⃣ Verifica consistencia y abre/recupera conexión
+   
     await this.sqlite.checkConnectionsConsistency();
     const { result: isConn } = await this.sqlite.isConnection(this.DB_NAME, false);
     if (isConn) {
@@ -36,11 +35,10 @@ export class SqliteService {
       );
     }
 
-    // 2️⃣ Ábrela y activa claves foráneas
     await this.db.open();
     await this.db.execute(`PRAGMA foreign_keys = ON;`);
 
-    // 3️⃣ Crea tablas si no existen
+    // cerar tables si no existen aun
     const createTablesSQL = `
       CREATE TABLE IF NOT EXISTS Usuarios(
         id INTEGER PRIMARY KEY NOT NULL,
@@ -75,64 +73,67 @@ export class SqliteService {
     `;
     await this.db.execute(createTablesSQL);
 
-    // 4️⃣ Inserta un usuario de prueba si no existe
+    // Test USER si no existe
     const seedUserStmt = `
       INSERT OR IGNORE INTO Usuarios
         (nombre, apellido, fechaNacimiento, comuna, direccion, email, password)
       VALUES (?,?,?,?,?,?,?);
     `;
     await this.db.run(seedUserStmt, [
-      'Tester',            // nombre
-      'Automatico',        // apellido
-      '1970-01-01',        // fechaNacimiento
-      'Santiago',          // comuna
-      'Av. Prueba 1313',   // direccion
-      'test@cancut.com',   // email
-      'tester123'          // password (texto plano SOLO para pruebas)
+      'Tester',            
+      'Automatico',       
+      '1970-01-01',        
+      'Santiago',         
+      'Av. Prueba 1313',   
+      'test@cancut.com',   
+      'tester123'         
     ]);
   }
 
-  /** Cierra la conexión */
+  /** Cerrar conexion */
   public async close(): Promise<void> {
     await this.db.close();
     await this.sqlite.closeConnection(this.DB_NAME, false);
   }
 
-  // — Métodos para Usuarios —
+  // MET Users:
 
   public async addUsuario(u: {
-    nombre: string;
-    apellido: string;
-    fechaNacimiento: string;
-    comuna: string;
-    direccion: string;
-    email: string;
-    password: string;
-  }): Promise<capSQLiteChanges> {
-    const stmt = `
-      INSERT INTO Usuarios
-        (nombre, apellido, fechaNacimiento, comuna, direccion, email, password)
-      VALUES (?,?,?,?,?,?,?);
-    `;
-    return this.db.run(stmt, [
-      u.nombre,
-      u.apellido,
-      u.fechaNacimiento,
-      u.comuna,
-      u.direccion,
-      u.email,
-      u.password
-    ]);
-  }
+  nombre: string;
+  apellido: string;
+  fechaNacimiento: string;
+  comuna: string;
+  direccion: string;
+  email: string;
+  password: string;
+}): Promise<capSQLiteChanges> {
+  const stmt = `
+    INSERT INTO Usuarios
+      (nombre, apellido, fechaNacimiento, comuna, direccion, email, password)
+    VALUES (?,?,?,?,?,?,?);
+  `;
+  const result = await this.db.run(stmt, [
+    u.nombre,
+    u.apellido,
+    u.fechaNacimiento,
+    u.comuna,
+    u.direccion,
+    u.email,
+    u.password
+  ]);
+  
+  console.log('♥[SQLite] Usuario registrado y almacenado en la BDD[SQLite]♥');
+  return result;
+}
 
   public async getUsuarios(): Promise<any[]> {
-    const res: capSQLiteValues = await this.db.query('SELECT * FROM Usuarios;', []);
-    return res.values ?? [];
-  }
+  const res: capSQLiteValues = await this.db.query('SELECT * FROM Usuarios;', []);
+  const usuarios = res.values ?? [];
+  console.log(`♥[SQLite] Usuarios obtenidos: ${usuarios.length}`);
+  return usuarios;
+}
 
-  /**
-   * Verifica credenciales de login
-   */
+  /**credenciales delogin */
   public async authenticate(email: string, password: string): Promise<boolean> {
     const res: capSQLiteValues = await this.db.query(
       'SELECT id FROM Usuarios WHERE email = ? AND password = ?;',
@@ -141,9 +142,7 @@ export class SqliteService {
     return (res.values ?? []).length > 0;
   }
 
-  /**
-   * Obtiene los datos completos de un usuario
-   */
+  /** Obtener datos totales de un usuario */
   public async getUsuario(email: string): Promise<any | null> {
     const res: capSQLiteValues = await this.db.query(
       'SELECT * FROM Usuarios WHERE email = ?;',
@@ -152,35 +151,39 @@ export class SqliteService {
     return (res.values ?? [null])[0];
   }
 
-  // — Métodos para Contacto —
+  // MET Contacto
 
   public async addContacto(c: {
-    nombre: string;
-    email: string;
-    tipoSolicitud: string;
-    mensaje: string;
-  }): Promise<capSQLiteChanges> {
-    const stmt = `
-      INSERT INTO Contacto
-        (nombre, email, tipoSolicitud, mensaje)
-      VALUES (?,?,?,?);
-    `;
-    return this.db.run(stmt, [
-      c.nombre,
-      c.email,
-      c.tipoSolicitud,
-      c.mensaje
-    ]);
-  }
+  nombre: string;
+  email: string;
+  tipoSolicitud: string;
+  mensaje: string;
+}): Promise<capSQLiteChanges> {
+  const stmt = `
+    INSERT INTO Contacto
+      (nombre, email, tipoSolicitud, mensaje)
+    VALUES (?,?,?,?);
+  `;
+
+  const result = await this.db.run(stmt, [
+    c.nombre,
+    c.email,
+    c.tipoSolicitud,
+    c.mensaje
+  ]);
+
+  console.log('♥[SQLite] Solicitud de contacto registrada:♥[SQLite]', c);
+  return result;
+}
 
   public async getContactos(): Promise<any[]> {
     const res: capSQLiteValues = await this.db.query('SELECT * FROM Contacto;', []);
     return res.values ?? [];
   }
 
-  // — Métodos para Reserva —
+  // MET Reserva
 
-  public async addReserva(r: {
+ public async addReserva(r: {
   nombreMascota: string;
   edadMascota: number;
   tamanoMascota: string;
@@ -197,7 +200,8 @@ export class SqliteService {
       (nombreMascota, edadMascota, tamanoMascota, fecha, hora, lugarEncuentro, sucursal, emailUsuario, latitud, longitud)
     VALUES (?,?,?,?,?,?,?,?,?,?);
   `;
-  return this.db.run(stmt, [
+
+  const result = await this.db.run(stmt, [
     r.nombreMascota,
     r.edadMascota,
     r.tamanoMascota,
@@ -209,6 +213,10 @@ export class SqliteService {
     r.latitud ?? null,
     r.longitud ?? null
   ]);
+
+  console.log('♥[SQLite] Reserva registrada y almacenada en la BDD[SQLite]♥');
+
+  return result;
 }
 
   public async getReservasPorUsuario(email: string): Promise<any[]> {
@@ -227,15 +235,15 @@ export class SqliteService {
     return res.values ?? [];
   }
 
-
-public async deleteDatabase(): Promise<void> {
+/*public async deleteDatabase(): Promise<void> {
   try {
     await (this.sqlite as any).deleteDatabase({ database: this.DB_NAME });
     console.log('🗑️ Base de datos eliminada con éxito.');
   } catch (error) {
     console.error('❌ Error al eliminar la base de datos:', error);
   }
-}
+}*/  // ccomentado para ejecucion real
+  
 
 
 }
