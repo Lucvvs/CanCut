@@ -12,6 +12,8 @@ import {
   IonText
 } from '@ionic/angular/standalone';
 
+import { SqliteService } from '../services/sqlite.service';
+
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
@@ -33,16 +35,27 @@ export class PerfilPage {
   reservas: any[] = [];
   usuario: any = {};
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private sqliteService: SqliteService) {}
 
-  ionViewWillEnter() {
-  const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
-  const todasLasReservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+  async ionViewWillEnter() {
+    const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
+    const email = usuarioActivo?.email;
 
+    if (!email) {
+      console.warn('[SQLite] No se encontró email en usuarioActivo');
+      return;
+    }
 
-  
-  this.reservas = todasLasReservas.filter((r: any) => r.emailUsuario === usuarioActivo.email);
+    try {
+      this.usuario = await this.sqliteService.getUsuario(email);
+      console.log('♥[SQLite] Usuario encontrado en BDD:', this.usuario.email);
 
-  this.usuario = usuarioActivo;
+      this.reservas = await this.sqliteService.getReservasPorUsuario(email);
+      console.log('♥[SQLite] Reservas cargadas desde BDD:', this.reservas);
+    } catch (error) {
+      console.error('♥[SQLite] Error al cargar datos desde la BDD:', error);
+    }
+  }
 }
-}
+
+

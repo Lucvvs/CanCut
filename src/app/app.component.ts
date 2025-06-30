@@ -23,11 +23,12 @@ export class AppComponent {
   }
 
   private async initDatabase() {
-    try {
-      await this.sqliteService.initialize();
-      console.log('✅ Base de datos inicializada');
-    } catch (err) {
-      console.error('❌ Error inicializando la BDD', err);
-    }
+  try {
+    await (this.sqliteService as any).deleteDatabase(); // ✅ SOLO UNA VEZ
+    await this.sqliteService.initialize();
+    console.log('♥[SQLite] Base de datos reiniciada e inicializada');
+  } catch (err) {
+    console.error('♥[SQLite] Error inicializando la BDD', err);
   }
+}
 }

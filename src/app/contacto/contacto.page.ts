@@ -86,7 +86,7 @@ export class ContactoPage implements OnInit {
         mensaje: datos.mensaje
       });
 
-      console.log('✅ Contacto almacenado en la BDD:', datos);
+      console.log('♥[SQLite] Contacto almacenado en la BDD:', datos.nombre);
 
       const toast = await this.toastCtrl.create({
         message: '¡Gracias por escribirnos! 📬',

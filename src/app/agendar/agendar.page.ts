@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Geolocation } from '@capacitor/geolocation';
 import {
   IonContent,
   IonInput,
@@ -94,38 +95,52 @@ export class AgendarPage implements OnInit {
   }
 
   async reservar() {
-    if (this.agendarForm.invalid) return;
+  if (this.agendarForm.invalid) return;
 
-    const datos = this.agendarForm.value;
-    const usuario = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
+  const datos = this.agendarForm.value;
+  const usuario = JSON.parse(localStorage.getItem('usuarioActivo') || '{}');
 
-    // Inserta en SQLite
-    await this.sqlite.addReserva({
-      nombreMascota: datos.nombreMascota,
-      edadMascota: Number(datos.edadMascota),
-      tamanoMascota: datos.tamanoMascota,
-      fecha: datos.fecha,
-      hora: datos.hora,
-      lugarEncuentro: datos.lugarEncuentro,
-      sucursal: datos.sucursal
-    });
+  // 🛰️ Obtener ubicación
+  let lat: number | undefined;
+  let lng: number | undefined;
 
-    // Asocia el email antes de recargar
-    console.log('✅ Reserva almacenada en la BDD para:', usuario.email);
-
-    // Opcional: guardar emailUsuario en la misma tabla si la quieres
-    // Para este ejemplo, recargamos el listado local:
-    await this.loadReservas();
-
-    // Feedback al usuario
-    const toast = await this.toastCtrl.create({
-      message: `¡Reserva para ${datos.nombreMascota} registrada!`,
-      duration: 2000,
-      color: 'success'
-    });
-    await toast.present();
-
-    this.agendarForm.reset();
-    this.router.navigate(['/tabs/perfil']);
+  try {
+    const position = await Geolocation.getCurrentPosition();
+    lat = position.coords.latitude;
+    lng = position.coords.longitude;
+    console.log('📍 Ubicación obtenida:', lat, lng);
+  } catch (error) {
+    console.warn('⚠️ No se pudo obtener la ubicación:', error);
+    lat = undefined;
+    lng = undefined;
   }
+
+  // 🗃️ Insertar en SQLite
+  await this.sqlite.addReserva({
+    nombreMascota: datos.nombreMascota,
+    edadMascota: Number(datos.edadMascota),
+    tamanoMascota: datos.tamanoMascota,
+    fecha: datos.fecha,
+    hora: datos.hora,
+    lugarEncuentro: datos.lugarEncuentro,
+    sucursal: datos.sucursal,
+    emailUsuario: usuario.email,
+    latitud: lat,
+    longitud: lng
+  });
+
+  console.log('♥[SQLite] Reserva almacenada en la BDD para:', usuario.email);
+
+  await this.loadReservas();
+
+  const toast = await this.toastCtrl.create({
+    message: `¡Reserva para ${datos.nombreMascota} registrada!`,
+    duration: 2000,
+    color: 'success'
+  });
+  await toast.present();
+
+  this.agendarForm.reset();
+  this.router.navigate(['/tabs/perfil']);
+}
 }

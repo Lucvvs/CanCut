@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatRadioModule } from '@angular/material/radio';
 import { HeaderComponent } from '../components/header/header.component';
+import { Geolocation } from '@capacitor/geolocation';
 import {
   IonContent,
   IonCard,
@@ -120,5 +121,12 @@ slideOpts = {
 
   constructor(private router: Router) {}
 
-  ngOnInit() { }
+  async ngOnInit() {
+  try {
+    const position = await Geolocation.getCurrentPosition();
+    console.log('✅ Geolocalización activa:', position.coords.latitude, position.coords.longitude);
+  } catch (error) {
+    console.error('❌ Falló la geolocalización:', error);
+  }
+}
 }

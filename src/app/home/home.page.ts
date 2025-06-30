@@ -62,7 +62,7 @@ export class HomePage {
       const valid = await this.sqlite.authenticate(email, password);
       if (valid) {
         // opcional: obtener datos completos del usuario
-        console.log(`✅ Usuario ${email} encontrado y validado en la BDD`);
+        console.log(`♥[SQLite] Usuario ${email} encontrado y validado en la BDD`);
         const user = await this.sqlite.getUsuario(email);
         // guarda en localStorage o en un servicio de estado
         localStorage.setItem('usuarioActivo', JSON.stringify(user));

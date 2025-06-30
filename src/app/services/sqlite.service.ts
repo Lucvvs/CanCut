@@ -11,7 +11,7 @@ import {
 export class SqliteService {
   private sqlite: SQLiteConnection;
   private db!: SQLiteDBConnection;
-  private readonly DB_NAME = 'cancut.db';
+  private readonly DB_NAME = 'bdd.cancut';
   private readonly DB_VERSION = 1;
 
   constructor() {
@@ -67,8 +67,11 @@ export class SqliteService {
         fecha TEXT NOT NULL,
         hora TEXT NOT NULL,
         lugarEncuentro TEXT NOT NULL,
-        sucursal TEXT NOT NULL
-      );
+        sucursal TEXT NOT NULL,
+        emailUsuario TEXT NOT NULL,
+        latitud REAL,
+        longitud REAL
+        );
     `;
     await this.db.execute(createTablesSQL);
 
@@ -178,29 +181,43 @@ export class SqliteService {
   // — Métodos para Reserva —
 
   public async addReserva(r: {
-    nombreMascota: string;
-    edadMascota: number;
-    tamanoMascota: string;
-    fecha: string;
-    hora: string;
-    lugarEncuentro: string;
-    sucursal: string;
-  }): Promise<capSQLiteChanges> {
-    const stmt = `
-      INSERT INTO Reserva
-        (nombreMascota, edadMascota, tamanoMascota, fecha, hora, lugarEncuentro, sucursal)
-      VALUES (?,?,?,?,?,?,?);
-    `;
-    return this.db.run(stmt, [
-      r.nombreMascota,
-      r.edadMascota,
-      r.tamanoMascota,
-      r.fecha,
-      r.hora,
-      r.lugarEncuentro,
-      r.sucursal
-    ]);
-  }
+  nombreMascota: string;
+  edadMascota: number;
+  tamanoMascota: string;
+  fecha: string;
+  hora: string;
+  lugarEncuentro: string;
+  sucursal: string;
+  emailUsuario: string;
+  latitud?: number;
+  longitud?: number;
+}): Promise<capSQLiteChanges> {
+  const stmt = `
+    INSERT INTO Reserva
+      (nombreMascota, edadMascota, tamanoMascota, fecha, hora, lugarEncuentro, sucursal, emailUsuario, latitud, longitud)
+    VALUES (?,?,?,?,?,?,?,?,?,?);
+  `;
+  return this.db.run(stmt, [
+    r.nombreMascota,
+    r.edadMascota,
+    r.tamanoMascota,
+    r.fecha,
+    r.hora,
+    r.lugarEncuentro,
+    r.sucursal,
+    r.emailUsuario,
+    r.latitud ?? null,
+    r.longitud ?? null
+  ]);
+}
+
+  public async getReservasPorUsuario(email: string): Promise<any[]> {
+  const res: capSQLiteValues = await this.db.query(
+    'SELECT * FROM Reserva WHERE emailUsuario = ? ORDER BY id DESC;',
+    [email]
+  );
+  return res.values ?? [];
+}
 
   public async getReservas(): Promise<any[]> {
     const res: capSQLiteValues = await this.db.query(
@@ -209,4 +226,16 @@ export class SqliteService {
     );
     return res.values ?? [];
   }
+
+
+public async deleteDatabase(): Promise<void> {
+  try {
+    await (this.sqlite as any).deleteDatabase({ database: this.DB_NAME });
+    console.log('🗑️ Base de datos eliminada con éxito.');
+  } catch (error) {
+    console.error('❌ Error al eliminar la base de datos:', error);
+  }
+}
+
+
 }
