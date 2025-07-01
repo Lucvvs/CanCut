@@ -1,5 +1,11 @@
 .header-con-logo {
   position: relative;
+  padding-top: env(safe-area-inset-top, 20px);
+}
+
+.boton-volver-img,
+.boton-soporte-img {
+  padding-top: env(safe-area-inset-top, 20px);
 }
 
 .logo-header {

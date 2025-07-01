@@ -42,20 +42,18 @@ export class PerfilPage {
     const email = usuarioActivo?.email;
 
     if (!email) {
-      console.warn(' No se encontró email en usuarioActivo');
+      console.warn('No se encontró email en usuarioActivo');
       return;
     }
 
     try {
       this.usuario = await this.sqliteService.getUsuario(email);
-      console.log(' Usuario encontrado en BDD:', this.usuario.email);
+      console.log('Usuario encontrado en BDD:', this.usuario);
 
       this.reservas = await this.sqliteService.getReservasPorUsuario(email);
-      console.log(' Reservas cargadas desde BDD:', this.reservas);
+      console.log('Reservas cargadas desde BDD:', this.reservas);
     } catch (error) {
-      console.error(' Error al cargar datos desde la BDD:', error);
+      console.error('Error al cargar datos desde la BDD:', error);
     }
   }
 }
-
-

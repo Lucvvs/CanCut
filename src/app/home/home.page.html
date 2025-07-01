@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" scroll="true" fullscreen>
   <div class="bienvenida">
     <h1>Iniciar Sesión <span class="marca">🔐</span></h1>
   </div>
@@ -18,16 +18,27 @@
   <form [formGroup]="loginForm" (ngSubmit)="login()">
     <ion-item class="login-item">
       <ion-label position="stacked" class="login-label">Correo electrónico</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
+      <ion-input
+        id="emailInput"
+        type="email"
+        formControlName="email"
+        inputmode="email"
+        autocapitalize="off"
+        (ionFocus)="onFocusScroll('emailInput')">
+      </ion-input>
     </ion-item>
 
     <ion-item class="login-item">
       <ion-label position="stacked" class="login-label">Contraseña</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
+      <ion-input
+        id="passInput"
+        type="password"
+        formControlName="password"
+        (ionFocus)="onFocusScroll('passInput')">
+      </ion-input>
     </ion-item>
 
-    <!-- Tu botón con imagen -->
-    <div class="btn-ingresar-container">
+    <div class="btn-ingresar-container" style="margin-top: 20px;">
       <img
         src="assets/img/btn-ingresar.png"
         alt="Ingresar"
@@ -37,12 +48,12 @@
       />
     </div>
 
-    <div class="login-error" *ngIf="loginError">
+    <div class="login-error" *ngIf="loginError" style="margin-top: 10px;">
       {{ loginError }}
     </div>
   </form>
 
-  <div class="registro-link" (click)="irARegistro()">
+  <div class="registro-link" style="margin-top: 30px;" (click)="irARegistro()">
     <p style="color: var(--ion-color-primary); text-align: center;">
       ¿No tienes cuenta?
       <strong style="cursor: pointer;">Regístrate</strong>

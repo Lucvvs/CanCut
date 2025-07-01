@@ -23,6 +23,15 @@
       "titulo": "Novedad desde Postman",
       "descripcion": "Esta novedad fue creada manualmente desde Postman.",
       "img": "assets/img/novedad1.png"
+    },
+    {
+      "id": "7655"
+    },
+    {
+      "id": "e95e",
+      "titulo": "Nueva promoción de invierno",
+      "descripcion": "Descuentos del 20% en todos los servicios para mascotas pequeñas.",
+      "imagen": "assets/img/novedad1.jpg"
     }
   ]
 }

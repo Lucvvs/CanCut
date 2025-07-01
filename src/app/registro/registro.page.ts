@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,12 +7,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SqliteService } from '../services/sqlite.service';
+import { ApiService } from '../services/api.service'; // api nacionlaiddes
 import { HeaderComponent } from '../components/header/header.component';
 import {
   IonContent,
   IonInput,
   IonLabel,
   IonButton,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -28,6 +31,8 @@ import { RouterModule } from '@angular/router';
     IonInput,
     IonLabel,
     IonButton,
+    IonSelect,          
+    IonSelectOption,    
     HeaderComponent,
     MatDatepickerModule,
     MatFormFieldModule,
@@ -38,10 +43,16 @@ import { RouterModule } from '@angular/router';
     RouterModule,
   ],
 })
-export class RegistroPage {
+export class RegistroPage implements OnInit { 
   registroForm: FormGroup;
+  nacionalidades: string[] = []; 
 
-  constructor(private fb: FormBuilder, private router: Router, private sqlite: SqliteService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private sqlite: SqliteService,
+    private api: ApiService 
+  ) {
     this.registroForm = this.fb.group({
       nombre: [
         '',
@@ -81,12 +92,12 @@ export class RegistroPage {
         ],
       ],
       email: [
-  '',
-  [
-    Validators.required,
-    Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|cl|org|net|edu|gov|mil|info|biz|co)$/)
-  ],
-],
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|cl|org|net|edu|gov|mil|info|biz|co)$/)
+        ],
+      ],
       password: [
         '',
         [
@@ -95,6 +106,20 @@ export class RegistroPage {
           Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/),
         ],
       ],
+      nacionalidad: [
+        '',
+        [
+          Validators.required,
+        ],
+      ], 
+    });
+  }
+
+  ngOnInit() {
+    this.api.getNacionalidades().subscribe(data => {
+      this.nacionalidades = data
+        .map(c => c.translations?.spa?.common || c.translations?.eng?.common || 'Desconocido')
+        .sort((a, b) => a.localeCompare(b));
     });
   }
 
@@ -140,35 +165,35 @@ export class RegistroPage {
     if (control.errors['email']) return 'Correo no válido';
     if (control.errors['menorDeEdad']) return 'Debes tener al menos 5 años';
     if (control.errors['demasiadosEspacios']) return 'Formato invalido';
-    
+
     return 'Campo inválido';
   }
 
   async registrar() {
-  if (this.registroForm.invalid) {
-    this.registroForm.markAllAsTouched();
-    return;
-  }
-
-  const nuevoUsuario = this.registroForm.value;
-
-  try {
-    const usuariosExistentes = await this.sqlite.getUsuarios();
-    const yaExiste = usuariosExistentes.some(u => u.email === nuevoUsuario.email);
-
-    if (yaExiste) {
-      alert('Este correo ya está registrado');
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
       return;
     }
 
-    await this.sqlite.addUsuario(nuevoUsuario);
-    localStorage.setItem('usuarioActivo', JSON.stringify(nuevoUsuario));
+    const nuevoUsuario = this.registroForm.value;
 
-    alert('Usuario registrado con éxito');
-    this.registroForm.reset();
-    this.router.navigate(['/']);
-  } catch (e) {
-    console.error('Error al registrar en SQLite:', e);
+    try {
+      const usuariosExistentes = await this.sqlite.getUsuarios();
+      const yaExiste = usuariosExistentes.some(u => u.email === nuevoUsuario.email);
+
+      if (yaExiste) {
+        alert('Este correo ya está registrado');
+        return;
+      }
+
+      await this.sqlite.addUsuario(nuevoUsuario);
+      localStorage.setItem('usuarioActivo', JSON.stringify(nuevoUsuario));
+
+      alert('Usuario registrado con éxito');
+      this.registroForm.reset();
+      this.router.navigate(['/']);
+    } catch (e) {
+      console.error('Error al registrar en SQLite:', e);
+    }
   }
-}
 }

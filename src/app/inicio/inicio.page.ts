@@ -129,13 +129,15 @@ export class InicioPage implements OnInit {
   }
 }
 
-async ionViewWillEnter() {
-  try {
-    const res = await this.api.getNovedades().toPromise();
-    this.novedades = res;
-    console.log('📰 Novedades actualizadas desde la API:', res);
-  } catch (err) {
-    console.error('❌ Error al actualizar novedades desde la API:', JSON.stringify(err));
-  }
+ionViewWillEnter() {
+  this.api.getNovedades().subscribe({
+    next: (res) => {
+      console.log('📰 Novedades actualizadas desde la API:', res);
+      this.novedades = [...this.novedades, ...res];
+    },
+    error: (err) => {
+      console.error('❌❌ Error al actualizar novedades desde la API:', JSON.stringify(err, null, 2));
+    }
+  });
 }
 }

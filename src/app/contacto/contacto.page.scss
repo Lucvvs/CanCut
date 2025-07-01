@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 1500px;
   margin: 20px auto;
-  background: #0c0c0c;
+  background: #b9b9b92f;
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 0 15px rgb(0, 0, 0);
@@ -24,7 +24,7 @@ h2 {
 .datos-contacto {
   margin-top: 40px;
   font-size: 16px;
-  background: #030303;
+  background: #0d005370;
   border-radius: 12px;
   padding: 20px;
   padding-bottom: 80px; 
@@ -32,18 +32,18 @@ h2 {
 }
 
 .datos-contacto h3 {
-  color: #002521;
+  color: #00d9ff;
   margin-bottom: 15px;
 }
 
 ion-content {
-  --background: #000;
+  --background: #000000;
   height: 100%;
   overflow-y: auto;
 }
 
 ion-item {
-  --background: #000; 
+  --background: #0d005370; 
   background: #000;
   --ion-item-background: #000;
   color: white;
@@ -74,7 +74,7 @@ ion-select::part(icon), ion-select::part(text) {
 
 .horario {
   margin-top: 30px;
-  background: #030303;
+  background: #0d005370;
   padding: 20px;
   border-radius: 12px;
   font-size: 16px;

@@ -33,6 +33,17 @@
       <div class="error" *ngIf="getError('fechaNacimiento')">{{ getError('fechaNacimiento') }}</div>
     </div>
 
+
+    <div class="campo campo-nacionalidad">
+  <ion-label class="label-movible3" position="stacked">Nacionalidad</ion-label>
+  <ion-select formControlName="nacionalidad" interface="popover" placeholder="Selecciona una opción">
+    <ion-select-option *ngFor="let n of nacionalidades" [value]="n">
+      {{ n }}
+    </ion-select-option>
+  </ion-select>
+  <div class="error" *ngIf="getError('nacionalidad')">{{ getError('nacionalidad') }}</div>
+</div>
+
     <div class="campo">
       <ion-label class="label-movible" position="stacked">Comuna</ion-label>
       <ion-input type="text" formControlName="comuna" placeholder="Ej: Ñuñoa"></ion-input>
@@ -56,6 +67,8 @@
       <ion-input type="password" formControlName="password" placeholder="Mínimo 6 caracteres"></ion-input>
       <div class="error" *ngIf="getError('password')">{{ getError('password') }}</div>
     </div>
+
+    
 
     <ion-button
       class="registro-btn"
